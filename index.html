@@ -99,44 +99,50 @@
    </div>
   </div>
   <script>
-   const soundBtn = document.getElementById('soundBtn');
-    const soundIcon = document.getElementById('soundIcon');
-    const audio = document.getElementById('backgroundAudio');
+  const soundBtn = document.getElementById('soundBtn');
+  const soundIcon = document.getElementById('soundIcon');
+  const audio = document.getElementById('backgroundAudio');
 
-    // Start audio muted initially
-    audio.volume = 0.5;
-    audio.muted = false;
-    audio.play().catch(() => {});
+  // Set default volume
+  audio.volume = 0.5;
 
-    soundBtn.addEventListener('click', () => {
-      if (audio.muted) {
-        audio.muted = false;
-        soundIcon.classList.remove('fa-volume-mute');
-        soundIcon.classList.add('fa-volume-up');
-      } else {
-        audio.muted = true;
-        soundIcon.classList.remove('fa-volume-up');
-        soundIcon.classList.add('fa-volume-mute');
-      }
+  // Play audio and unmute if user interacts
+  document.addEventListener('DOMContentLoaded', () => {
+    audio.play().catch(() => {
+      // Autoplay might be blocked, unmute only after click
+      console.log("Autoplay blocked, waiting for user interaction");
     });
+  });
 
-    // Optional: Use mouse wheel over button to increase/decrease volume
-    soundBtn.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      if (audio.muted) {
-        audio.muted = false;
-        soundIcon.classList.remove('fa-volume-mute');
-        soundIcon.classList.add('fa-volume-up');
-      }
-      let newVolume = audio.volume + (e.deltaY < 0 ? 0.1 : -0.1);
-      newVolume = Math.min(1, Math.max(0, newVolume));
-      audio.volume = newVolume;
-      if (audio.volume === 0) {
-        audio.muted = true;
-        soundIcon.classList.remove('fa-volume-up');
-        soundIcon.classList.add('fa-volume-mute');
-      }
-    });
-  </script>
+  soundBtn.addEventListener('click', () => {
+    if (audio.muted) {
+      audio.muted = false;
+      audio.play();
+      soundIcon.classList.remove('fa-volume-mute');
+      soundIcon.classList.add('fa-volume-up');
+    } else {
+      audio.muted = true;
+      soundIcon.classList.remove('fa-volume-up');
+      soundIcon.classList.add('fa-volume-mute');
+    }
+  });
+
+  soundBtn.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    if (audio.muted) {
+      audio.muted = false;
+      soundIcon.classList.remove('fa-volume-mute');
+      soundIcon.classList.add('fa-volume-up');
+    }
+    let newVolume = audio.volume + (e.deltaY < 0 ? 0.1 : -0.1);
+    newVolume = Math.min(1, Math.max(0, newVolume));
+    audio.volume = newVolume;
+    if (audio.volume === 0) {
+      audio.muted = true;
+      soundIcon.classList.remove('fa-volume-up');
+      soundIcon.classList.add('fa-volume-mute');
+    }
+  });
+</script>
  </body>
 </html>
